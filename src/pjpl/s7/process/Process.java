@@ -30,7 +30,7 @@ public abstract class Process implements Runnable, Observer{
 	//------------------------------------------------------------------------------
 	// interface
 
-	public byte getId(){
+	public byte getProcessId(){
 		return processId;
 	}
 	public void sendCommand(Command command){
@@ -39,6 +39,8 @@ public abstract class Process implements Runnable, Observer{
 
 	// interface
 	//------------------------------------------------------------------------------
+
+	public abstract void onVariableChange(short codeVar);
 
 	@Override
 	public void run() {
@@ -80,6 +82,10 @@ public abstract class Process implements Runnable, Observer{
 						break;
 				}
 			}
+		} else if( object instanceof Variables){
+			// Variables zawsze infrmuje o zmianie podając kod zmienionej zmiennej
+			short code = Short.parseShort(attrybute.toString());
+			onVariableChange(code);
 		}
 	}
 	public abstract void onResponseRaportFull(ResponseRaportFull response);
@@ -101,8 +107,12 @@ public abstract class Process implements Runnable, Observer{
 	}
 
 	//------------------------------------------------------------------------------
-	// atrybutye chronione
+	// atrybuty chronione
 
+	/**
+	 * Zarządza kopiami zmiennych z SimaticServer.
+	 */
+	protected Variables variables;
 
 	//------------------------------------------------------------------------------
 	// atrybutye prywatne
@@ -110,9 +120,5 @@ public abstract class Process implements Runnable, Observer{
 	private byte processId;
 	private boolean doRun = true;
 
-	/**
-	 * Zarządza kopiami zmiennych z SimaticServer.
-	 */
-	private Variables variables;
 	private LinkedBlockingQueue<Command> commandQueue;
 }

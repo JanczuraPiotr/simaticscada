@@ -209,19 +209,32 @@ public class Bits {
 
 	};
 
-	public static int get(byte var, byte bitNr){
-		return ( ( var & maskByte[bitNr] ) > 0 ? 1 : 0 ) ;
+	public static boolean compare(byte l, byte bitl, byte r, byte bitr){
+		return (boolean)(
+						(
+							(
+								( l & maskByte[bitl] ) ==  ( r & maskByte[bitr] )
+							)
+							?
+							true
+							:
+							false
+						)
+					);
 	}
-	public static int get(short var, byte bitNr){
-		return ( ( var & maskShort[bitNr] ) > 0 ? 1 : 0 ) ;
+	public static boolean get(byte var, byte bitNr){
+		return ( ( var & maskByte[bitNr] ) > 0 ? true : false ) ;
 	}
-	public static int get(int var, byte bitNr){
-		return ( ( var & maskInt[bitNr] ) > 0 ? 1 : 0 ) ;
+	public static boolean get(short var, byte bitNr){
+		return ( ( var & maskShort[bitNr] ) > 0 ? true : false ) ;
 	}
-	public static int get(long var, byte bitNr){
-		return ( ( var & maskLong[bitNr] ) > 0 ? 1 : 0 ) ;
+	public static boolean get(int var, byte bitNr){
+		return ( ( var & maskInt[bitNr] ) > 0 ? true : false ) ;
 	}
-	public static int get(byte[] var, byte bitNr){
+	public static boolean get(long var, byte bitNr){
+		return ( ( var & maskLong[bitNr] ) > 0 ? true : false ) ;
+	}
+	public static boolean get(byte[] var, byte bitNr){
 		// @todo rzucić wyjątek gdy bitNie nie mieści się w buforze
 
 		int buffSize = var.length;
@@ -234,7 +247,7 @@ public class Bits {
 		// którym bitem jest w bajcie
 		int bitInByte = bitNr % 8;
 
-		return ( ( var[bitInBuffByte] & maskByte[bitInByte] ) > 0 ? 1 : 0 ) ;
+		return ( ( var[bitInBuffByte] & maskByte[bitInByte] ) > 0 ? true : false ) ;
 	}
 	public static byte on(byte var, byte bitNr){
 		return (byte) (var | maskByte[bitNr]);
@@ -290,35 +303,35 @@ public class Bits {
 
 	}
 	public static byte sw(byte var, byte bitNr){
-		if( get(var, bitNr) == 1){
+		if( get(var, bitNr) ){
 			return off(var, bitNr);
 		}else{
 			return on(var,bitNr);
 		}
 	}
 	public static int sw(short var, byte bitNr){
-		if( get(var, bitNr) == 1){
+		if( get(var, bitNr) ){
 			return off(var, bitNr);
 		}else{
 			return on(var,bitNr);
 		}
 	}
 	public static int sw(int var, byte bitNr){
-		if( get(var, bitNr) == 1){
+		if( get(var, bitNr) ){
 			return off(var, bitNr);
 		}else{
 			return on(var,bitNr);
 		}
 	}
 	public static long sw(long var, byte bitNr){
-		if( get(var, bitNr) == 1){
+		if( get(var, bitNr) ){
 			return off(var, bitNr);
 		}else{
 			return on(var,bitNr);
 		}
 	}
 	public static void sw(byte[] var, byte bitNr){
-		if( get(var, bitNr) == 1){
+		if( get(var, bitNr) ){
 			off(var, bitNr);
 		}else{
 			on(var,bitNr);

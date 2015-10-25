@@ -14,12 +14,10 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JFrame;
 import pjpl.s7.command.Command;
 import pjpl.s7.utils.Properties;
 import pjpl.s7.common.ConstProcess;
 import pjpl.s7.net.ServerCommandThread;
-import pjpl.scada.form.MainFrame;
 import pjpl.scada.process.Process1;
 
 /**
@@ -51,7 +49,7 @@ public class SimaticScada {
 		// procesy
 
 		process1 = new Process1(ConstProcess.PROCESS1_ID, commandQueue);
-		processes.put(process1.getId(), process1 );
+		processes.put(process1.getProcessId(), process1 );
 
 		// procesy
 		//------------------------------------------------------------------------------
@@ -89,13 +87,9 @@ public class SimaticScada {
 		} catch (IOException ex) {
 			Logger.getLogger(SimaticScada.class.getName()).log(Level.SEVERE, null, ex);
 		}
-		
+
 		//------------------------------------------------------------------------------
 		// intrfejs
-
-		JFrame mainFrame = new MainFrame();
-		mainFrame.setLocationRelativeTo(null);
-		mainFrame.setVisible(true);
 
 		// intrfejs
 		//------------------------------------------------------------------------------

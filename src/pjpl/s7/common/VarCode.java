@@ -9,24 +9,25 @@ abstract public class VarCode{
 	/**
 	 * Byte
 	 */
-	public static final short ZMIENNA_1 = (short)0x2001;
+	public static final short ZMIENNA_1 = (short)0x0000;
 	/**
 	 * Int
 	 */
-	public static final short ZMIENNA_2 = (short)0x3002;
+	public static final short ZMIENNA_2 = (short)0x0001;
 	/**
 	 * DInt
 	 */
-	public static final short ZMIENNA_3 = (short)0x4003;
+	public static final short ZMIENNA_3 = (short)0x0002;
 	/**
 	 * Real
 	 */
-	public static final short ZMIENNA_4 = (short)0x5004;
+	public static final short ZMIENNA_4 = (short)0x0003;
 
 	/**
 	 * Byte
 	 */
-	public static final short I_0    = (short)0x1000;
+	public static final short I_0    = (short)0x0000;
+
 	public static final short I_0_0  = (short)0x8000;
 	public static final short I_0_1  = (short)0x8001;
 	public static final short I_0_2  = (short)0x8002;
@@ -39,7 +40,7 @@ abstract public class VarCode{
 	/**
 	 * Byte
 	 */
-	public static final short Q_0    = (short)0x1010;
+	public static final short Q_0    = (short)0x0000;
 	public static final short Q_0_0  = (short)0x8010;
 	public static final short Q_0_1  = (short)0x8011;
 	public static final short Q_0_2  = (short)0x8012;
