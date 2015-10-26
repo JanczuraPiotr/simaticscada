@@ -41,13 +41,12 @@ abstract public class VarCode{
 	 * Byte
 	 */
 	public static final short Q_0    = (short)0x0000;
+
 	public static final short Q_0_0  = (short)0x8010;
 	public static final short Q_0_1  = (short)0x8011;
 	public static final short Q_0_2  = (short)0x8012;
 	public static final short Q_0_3  = (short)0x8013;
 	public static final short Q_0_4  = (short)0x8014;
-	public static final short Q_0_5  = (short)0x8015;
-	public static final short Q_0_6  = (short)0x8016;
-	public static final short Q_0_7  = (short)0x8017;
+	public static final short Q_0_5  = (short)0x8015;;
 
 }

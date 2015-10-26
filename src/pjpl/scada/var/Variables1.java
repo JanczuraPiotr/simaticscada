@@ -55,12 +55,26 @@ public class Variables1 extends java.util.Observable implements pjpl.s7.var.Vari
 		}
 	}
 
+	public byte getZmienna_1(){
+		return zmienna_1;
+	}
+	public short getZmienna_2(){
+		return zmienna_2;
+	}
+	public int getZmienna_3(){
+		return zmienna_3;
+	}
+	public float getZmienna_4(){
+		return zmienna_4;
+	}
+
 	public byte getQ_0(){
 		return Q_0;
 	}
 	public byte getI_0(){
 		return I_0;
 	}
+
 	public boolean getI_0_0(){return I_0_0;}
 	public boolean getI_0_1(){return I_0_1;}
 	public boolean getI_0_2(){return I_0_2;}
@@ -69,6 +83,13 @@ public class Variables1 extends java.util.Observable implements pjpl.s7.var.Vari
 	public boolean getI_0_5(){return I_0_5;}
 	public boolean getI_0_6(){return I_0_6;}
 	public boolean getI_0_7(){return I_0_7;}
+
+	public boolean getQ_0_0(){return Q_0_0;}
+	public boolean getQ_0_1(){return Q_0_1;}
+	public boolean getQ_0_2(){return Q_0_2;}
+	public boolean getQ_0_3(){return Q_0_3;}
+	public boolean getQ_0_4(){return Q_0_4;}
+	public boolean getQ_0_5(){return Q_0_5;}
 
 	public void setQ_0_0(boolean b){
 		Q_0_0 = b;
@@ -168,33 +189,33 @@ public class Variables1 extends java.util.Observable implements pjpl.s7.var.Vari
 	}
 	protected void setQ_0(byte var){
 		if( Q_0 != var){
-			setChanged();
 			setQ_0_0(var);
 			setQ_0_1(var);
 			setQ_0_2(var);
 			setQ_0_3(var);
 			setQ_0_4(var);
 			setQ_0_5(var);
-//			setQ_0_6(var);
-//			setQ_0_7(var);
 			Q_0 = var;
 		}
 	}
 	protected void setQ_0_0(byte var ){
 		if( ! Bits.compare(var, Bits.BIT_0, Q_0, Bits.BIT_0) ){
 			Q_0_0 = Bits.get(var, Bits.BIT_0);
+			setChanged();
 			notifyObservers(VarCode.Q_0_0);
 		}
 	}
 	protected void setQ_0_1(byte var ){
 		if( ! Bits.compare(var, Bits.BIT_1, Q_0, Bits.BIT_1) ){
 			Q_0_1 = Bits.get(var, Bits.BIT_1);
+			setChanged();
 			notifyObservers(VarCode.Q_0_1);
 		}
 	}
 	protected void setQ_0_2(byte var ){
 		if( ! Bits.compare(var, Bits.BIT_2, Q_0, Bits.BIT_2) ){
 			Q_0_2 = Bits.get(var, Bits.BIT_2);
+			setChanged();
 			notifyObservers(VarCode.Q_0_2);
 		}
 
@@ -202,33 +223,24 @@ public class Variables1 extends java.util.Observable implements pjpl.s7.var.Vari
 	protected void setQ_0_3(byte var ){
 		if( ! Bits.compare(var, Bits.BIT_3, Q_0, Bits.BIT_3) ){
 			Q_0_3 = Bits.get(var, Bits.BIT_3);
+			setChanged();
 			notifyObservers(VarCode.Q_0_3);
 		}
 	}
 	protected void setQ_0_4(byte var ){
 		if( ! Bits.compare(var, Bits.BIT_4, Q_0, Bits.BIT_4) ){
 			Q_0_4 = Bits.get(var, Bits.BIT_4);
+			setChanged();
 			notifyObservers(VarCode.Q_0_4);
 		}
 	}
 	protected void setQ_0_5(byte var ){
 		if( ! Bits.compare(var, Bits.BIT_5, Q_0, Bits.BIT_5) ){
 			Q_0_5 = Bits.get(var, Bits.BIT_5);
+			setChanged();
 			notifyObservers(VarCode.Q_0_5);
 		}
 	}
-//	public void setQ_0_6(byte var ){
-//		if( ! Bits.compare(var, Bits.BIT_6, Q_0, Bits.BIT_6) ){
-//			Q_0_6 = Bits.get(var, Bits.BIT_6);
-//			notifyObservers(VarCode.Q_0_6);
-//		}
-//	}
-//	public void setQ_0_7(byte var ){
-//		if( ! Bits.compare(var, Bits.BIT_7, Q_0, Bits.BIT_7) ){
-//			Q_0_7 = Bits.get(var, Bits.BIT_7);
-//			notifyObservers(VarCode.Q_0_7);
-//		}
-//	}
 
 	private byte zmienna_1 = 0;
 	private short zmienna_2 = 0;
@@ -251,6 +263,4 @@ public class Variables1 extends java.util.Observable implements pjpl.s7.var.Vari
 	private boolean Q_0_3 = false;
 	private boolean Q_0_4 = false;
 	private boolean Q_0_5 = false;
-//	private int Q_0_6 = 0;
-//	private int Q_0_7 = 0;
 }

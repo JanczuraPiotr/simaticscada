@@ -17,8 +17,8 @@ public class BitSwitch extends Command{
 		this.varCode = varCode;
 		this.bitNr = bitNr;
 		init();
-		System.out.println(String.format("memType = 0x%02X", memType));
-		System.out.println(String.format("this.memType = 0x%02X", this.memType));
+//		System.out.println(String.format("memType = 0x%02X", memType));
+//		System.out.println(String.format("this.memType = 0x%02X", this.memType));
 	}
 
 	@Override
@@ -38,10 +38,6 @@ public class BitSwitch extends Command{
 		BigEndianInArray._byte(memType, buff, 3);
 		BigEndianInArray._short(varCode, buff, 4);
 		BigEndianInArray._byte(bitNr, buff, 6);
-
-		for( int i = 0 ;i < buffSize ; i++ ){
-			System.out.println(String.format("buff[%d] = 0x%02X", i , buff[i]));
-		}
 	}
 
 	protected byte memType;

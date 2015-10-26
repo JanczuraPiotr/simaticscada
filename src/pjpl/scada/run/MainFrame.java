@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,16 +14,82 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import pjpl.s7.command.Command;
 import pjpl.s7.common.ConstProcess;
+import pjpl.s7.common.VarCode;
 import pjpl.s7.net.ServerCommandThread;
 import pjpl.s7.utils.Properties;
 import pjpl.scada.process.Process1;
-import pjpl.scada.run.ConfigDefault;
+import pjpl.scada.var.Variables1;
 
 
 /**
  * @author Piotr Janczura <piotr@janczura.pl>
  */
 public class MainFrame extends javax.swing.JFrame{
+
+	class Observator implements Observer{
+		public Observator() {
+
+			tf_Zmienna_1.setText(String.valueOf(process1.getZmienna_1()));
+			tf_Zmienna_2.setText(String.valueOf(process1.getZmienna_2()));
+			tf_Zmienna_3.setText(String.valueOf(process1.getZmienna_3()));
+			tf_Zmienna_4.setText(String.valueOf(process1.getZmienna_4()));
+
+			cbx_Q_0_0.setSelected(process1.getQ_0_0());
+			cbx_Q_0_1.setSelected(process1.getQ_0_1());
+			cbx_Q_0_2.setSelected(process1.getQ_0_2());
+			cbx_Q_0_3.setSelected(process1.getQ_0_3());
+			cbx_Q_0_4.setSelected(process1.getQ_0_4());
+			cbx_Q_0_5.setSelected(process1.getQ_0_5());
+
+			cbx_I_0_0.setSelected(process1.getI_0_0());
+			cbx_I_0_1.setSelected(process1.getI_0_1());
+			cbx_I_0_2.setSelected(process1.getI_0_2());
+			cbx_I_0_3.setSelected(process1.getI_0_3());
+			cbx_I_0_4.setSelected(process1.getI_0_4());
+			cbx_I_0_5.setSelected(process1.getI_0_5());
+			cbx_I_0_6.setSelected(process1.getI_0_6());
+			cbx_I_0_7.setSelected(process1.getI_0_7());
+
+		}
+		public void update(Observable object, Object attrybute) {
+//			System.out.println("object = "+object+" attrybut = "+attrybute);
+			if( object instanceof Variables1){
+				onVariableChange( (Variables1)object, Short.parseShort(attrybute.toString()));
+			}
+		}
+		public void onVariableChange(Variables1 variables, short codeVar) {
+			switch(codeVar){
+				case VarCode.ZMIENNA_1: tf_Zmienna_1.setText(String.valueOf(process1.getZmienna_1())); break;
+				case VarCode.ZMIENNA_2: tf_Zmienna_2.setText(String.valueOf(process1.getZmienna_2())); break;
+				case VarCode.ZMIENNA_3: tf_Zmienna_3.setText(String.valueOf(process1.getZmienna_3())); break;
+				case VarCode.ZMIENNA_4: tf_Zmienna_4.setText(String.valueOf(process1.getZmienna_4())); break;
+				case VarCode.I_0_0 :    cbx_I_0_0.setSelected(variables.getI_0_0());break;
+				case VarCode.I_0_1 :    cbx_I_0_1.setSelected(variables.getI_0_1());break;
+				case VarCode.I_0_2 :    cbx_I_0_2.setSelected(variables.getI_0_2());break;
+				case VarCode.I_0_3 :    cbx_I_0_3.setSelected(variables.getI_0_3());break;
+				case VarCode.I_0_4 :    cbx_I_0_4.setSelected(variables.getI_0_4());break;
+				case VarCode.I_0_5 :    cbx_I_0_5.setSelected(variables.getI_0_5());break;
+				case VarCode.I_0_6 :    cbx_I_0_6.setSelected(variables.getI_0_6());break;
+				case VarCode.I_0_7 :    cbx_I_0_7.setSelected(variables.getI_0_7());break;
+				case VarCode.Q_0_0 :    cbx_Q_0_0.setSelected(variables.getQ_0_0()); break;
+				case VarCode.Q_0_1 :    cbx_Q_0_1.setSelected(variables.getQ_0_1()); break;
+				case VarCode.Q_0_2 :    cbx_Q_0_2.setSelected(variables.getQ_0_2()); break;
+				case VarCode.Q_0_3 :    cbx_Q_0_3.setSelected(variables.getQ_0_3()); break;
+				case VarCode.Q_0_4 :    cbx_Q_0_4.setSelected(variables.getQ_0_4()); break;
+				case VarCode.Q_0_5 :    cbx_Q_0_5.setSelected(variables.getQ_0_5()); break;
+			}
+		}
+		public void setCBX_Q_0_0(boolean b){
+			cbx_Q_0_0.setSelected(b);
+		}
+	}
+	private Observator observator ;
+
+	public static final String configFile = "SimaticScada.ini";
+	public static Properties config;
+	public static long timeStart;
+	public static long time_interval;
+
 	/**
 	 * Creates new form manFrame
 	 */
@@ -30,6 +98,8 @@ public class MainFrame extends javax.swing.JFrame{
 
 		timeStart = System.currentTimeMillis();
 		configInit();
+
+
 
 		//------------------------------------------------------------------------------
 		// inicjacja zmiennych
@@ -78,16 +148,34 @@ public class MainFrame extends javax.swing.JFrame{
 							, TimeUnit.MILLISECONDS
 			);
 
+			observator = new Observator();
+			process1.addVariablesObserver(observator);
+
 			// uruchamianie
 			//------------------------------------------------------------------------------
 
 		} catch (IOException ex) {
 			Logger.getLogger(SimaticScada.class.getName()).log(Level.SEVERE, null, ex);
 		}
-
-
-
 	}
+
+//	private Observator createObserver(){
+
+//		class Obs implements Observer{
+//			public Obs() {
+//			}
+//			public void update(Observable object, Object attrybute) {
+//
+//			}
+//
+//			public void setCBX_Q_0_0(boolean b){
+//				cbx_Q_0_0.setSelected(b);
+//			}
+//		}
+//
+//		return new Obs();
+//	}
+
 	/**
 	 * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
 	 * content of this method is always regenerated by the Form Editor.
@@ -97,22 +185,22 @@ public class MainFrame extends javax.swing.JFrame{
   private void initComponents() {
     bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
-    cbx_I_0 = new javax.swing.JCheckBox();
-    cbx_I_2 = new javax.swing.JCheckBox();
-    cbx_I_1 = new javax.swing.JCheckBox();
-    cbx_I_3 = new javax.swing.JCheckBox();
-    cbx_I_4 = new javax.swing.JCheckBox();
-    cbx_I_5 = new javax.swing.JCheckBox();
-    cbx_I_6 = new javax.swing.JCheckBox();
-    cbx_I_7 = new javax.swing.JCheckBox();
-    tfZmienna_1 = new javax.swing.JTextField();
+    cbx_I_0_0 = new javax.swing.JCheckBox();
+    cbx_I_0_2 = new javax.swing.JCheckBox();
+    cbx_I_0_1 = new javax.swing.JCheckBox();
+    cbx_I_0_3 = new javax.swing.JCheckBox();
+    cbx_I_0_4 = new javax.swing.JCheckBox();
+    cbx_I_0_5 = new javax.swing.JCheckBox();
+    cbx_I_0_6 = new javax.swing.JCheckBox();
+    cbx_I_0_7 = new javax.swing.JCheckBox();
+    tf_Zmienna_1 = new javax.swing.JTextField();
     jLabel1 = new javax.swing.JLabel();
     jLabel2 = new javax.swing.JLabel();
     jLabel3 = new javax.swing.JLabel();
     jLabel4 = new javax.swing.JLabel();
-    tfZmienna_2 = new javax.swing.JTextField();
-    tfZmienna_3 = new javax.swing.JTextField();
-    tfZmienna_4 = new javax.swing.JTextField();
+    tf_Zmienna_2 = new javax.swing.JTextField();
+    tf_Zmienna_3 = new javax.swing.JTextField();
+    tf_Zmienna_4 = new javax.swing.JTextField();
     cbx_Q_0_0 = new javax.swing.JCheckBox();
     cbx_Q_0_2 = new javax.swing.JCheckBox();
     cbx_Q_0_1 = new javax.swing.JCheckBox();
@@ -132,50 +220,58 @@ public class MainFrame extends javax.swing.JFrame{
       }
     });
 
-    cbx_I_0.setText("wejście 0");
-    cbx_I_0.setEnabled(false);
-    cbx_I_0.setName("cbx_I_0"); // NOI18N
-
-    cbx_I_2.setText("wejście 2");
-    cbx_I_2.setEnabled(false);
-    cbx_I_2.setName("cbx_I_2"); // NOI18N
-
-    cbx_I_1.setText("wejście 1");
-    cbx_I_1.setEnabled(false);
-    cbx_I_1.setName("cbx_I_1"); // NOI18N
-    cbx_I_1.addActionListener(new java.awt.event.ActionListener() {
+    cbx_I_0_0.setText("wejście 0");
+    cbx_I_0_0.setEnabled(false);
+    cbx_I_0_0.setName("cbx_I_0_0"); // NOI18N
+    cbx_I_0_0.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        cbx_I_1ActionPerformed(evt);
+        cbx_I_0_0ActionPerformed(evt);
       }
     });
 
-    cbx_I_3.setText("wejście 3");
-    cbx_I_3.setEnabled(false);
-    cbx_I_3.setName("cbx_I_3"); // NOI18N
+    cbx_I_0_2.setText("wejście 2");
+    cbx_I_0_2.setEnabled(false);
+    cbx_I_0_2.setName("cbx_I_0_2"); // NOI18N
 
-    cbx_I_4.setText("wejście 4");
-    cbx_I_4.setEnabled(false);
-    cbx_I_4.setName("cbx_I_4"); // NOI18N
-
-    cbx_I_5.setText("wejście 5");
-    cbx_I_5.setEnabled(false);
-
-    cbx_I_6.setText("wejście 6");
-    cbx_I_6.setEnabled(false);
-
-    cbx_I_7.setText("wejście 7");
-    cbx_I_7.setEnabled(false);
-
-    tfZmienna_1.setToolTipText("");
-    tfZmienna_1.setName("tfByte"); // NOI18N
-    tfZmienna_1.addActionListener(new java.awt.event.ActionListener() {
+    cbx_I_0_1.setText("wejście 1");
+    cbx_I_0_1.setEnabled(false);
+    cbx_I_0_1.setName("cbx_I_0_1"); // NOI18N
+    cbx_I_0_1.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        tfZmienna_1ActionPerformed(evt);
+        cbx_I_0_1ActionPerformed(evt);
       }
     });
-    tfZmienna_1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+
+    cbx_I_0_3.setText("wejście 3");
+    cbx_I_0_3.setEnabled(false);
+    cbx_I_0_3.setName("cbx_I_0_3"); // NOI18N
+
+    cbx_I_0_4.setText("wejście 4");
+    cbx_I_0_4.setEnabled(false);
+    cbx_I_0_4.setName("cbx_I_0_4"); // NOI18N
+
+    cbx_I_0_5.setText("wejście 5");
+    cbx_I_0_5.setEnabled(false);
+    cbx_I_0_5.setName("cbx_I_0_5"); // NOI18N
+
+    cbx_I_0_6.setText("wejście 6");
+    cbx_I_0_6.setEnabled(false);
+    cbx_I_0_6.setName("cbx_I_0_6"); // NOI18N
+
+    cbx_I_0_7.setText("wejście 7");
+    cbx_I_0_7.setEnabled(false);
+    cbx_I_0_7.setName("cbx_I_0_7"); // NOI18N
+
+    tf_Zmienna_1.setToolTipText("");
+    tf_Zmienna_1.setName("tf_zmienna_1"); // NOI18N
+    tf_Zmienna_1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        tf_Zmienna_1ActionPerformed(evt);
+      }
+    });
+    tf_Zmienna_1.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
       public void propertyChange(java.beans.PropertyChangeEvent evt) {
-        tfZmienna_1PropertyChange(evt);
+        tf_Zmienna_1PropertyChange(evt);
       }
     });
 
@@ -187,27 +283,27 @@ public class MainFrame extends javax.swing.JFrame{
 
     jLabel4.setText("zmienna Byte");
 
-    tfZmienna_2.setAutoscrolls(false);
-    tfZmienna_2.setName("tfInt"); // NOI18N
-    tfZmienna_2.addActionListener(new java.awt.event.ActionListener() {
+    tf_Zmienna_2.setAutoscrolls(false);
+    tf_Zmienna_2.setName("tf_zmienna_2"); // NOI18N
+    tf_Zmienna_2.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        tfZmienna_2ActionPerformed(evt);
+        tf_Zmienna_2ActionPerformed(evt);
       }
     });
 
-    tfZmienna_3.setToolTipText("");
-    tfZmienna_3.setName("tfDInt"); // NOI18N
-    tfZmienna_3.addActionListener(new java.awt.event.ActionListener() {
+    tf_Zmienna_3.setToolTipText("");
+    tf_Zmienna_3.setName("tf_zmienna_1"); // NOI18N
+    tf_Zmienna_3.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        tfZmienna_3ActionPerformed(evt);
+        tf_Zmienna_3ActionPerformed(evt);
       }
     });
 
-    tfZmienna_4.setToolTipText("");
-    tfZmienna_4.setName("tfReal"); // NOI18N
-    tfZmienna_4.addActionListener(new java.awt.event.ActionListener() {
+    tf_Zmienna_4.setToolTipText("");
+    tf_Zmienna_4.setName("tf_zmienna_4"); // NOI18N
+    tf_Zmienna_4.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
-        tfZmienna_4ActionPerformed(evt);
+        tf_Zmienna_4ActionPerformed(evt);
       }
     });
 
@@ -277,10 +373,25 @@ public class MainFrame extends javax.swing.JFrame{
     });
 
     jButton2.setText("ustaw");
+    jButton2.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton2ActionPerformed(evt);
+      }
+    });
 
     jButton3.setText("ustaw");
+    jButton3.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton3ActionPerformed(evt);
+      }
+    });
 
     jButton4.setText("ustaw");
+    jButton4.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton4ActionPerformed(evt);
+      }
+    });
 
     javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
     getContentPane().setLayout(layout);
@@ -291,14 +402,14 @@ public class MainFrame extends javax.swing.JFrame{
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
           .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-              .addComponent(cbx_I_0)
-              .addComponent(cbx_I_1)
-              .addComponent(cbx_I_2, javax.swing.GroupLayout.Alignment.TRAILING))
-            .addComponent(cbx_I_3, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(cbx_I_4, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(cbx_I_5, javax.swing.GroupLayout.Alignment.TRAILING)
-            .addComponent(cbx_I_6, javax.swing.GroupLayout.Alignment.TRAILING))
-          .addComponent(cbx_I_7))
+              .addComponent(cbx_I_0_0)
+              .addComponent(cbx_I_0_1)
+              .addComponent(cbx_I_0_2, javax.swing.GroupLayout.Alignment.TRAILING))
+            .addComponent(cbx_I_0_3, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(cbx_I_0_4, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(cbx_I_0_5, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(cbx_I_0_6, javax.swing.GroupLayout.Alignment.TRAILING))
+          .addComponent(cbx_I_0_7))
         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -312,10 +423,10 @@ public class MainFrame extends javax.swing.JFrame{
               .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-              .addComponent(tfZmienna_3)
-              .addComponent(tfZmienna_1)
-              .addComponent(tfZmienna_2)
-              .addComponent(tfZmienna_4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+              .addComponent(tf_Zmienna_3)
+              .addComponent(tf_Zmienna_1)
+              .addComponent(tf_Zmienna_2)
+              .addComponent(tf_Zmienna_4, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
               .addComponent(jButton1)
@@ -341,7 +452,7 @@ public class MainFrame extends javax.swing.JFrame{
         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
           .addGroup(layout.createSequentialGroup()
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-              .addComponent(tfZmienna_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+              .addComponent(tf_Zmienna_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
               .addComponent(cbx_Q_0_0)
               .addComponent(jLabel1)
               .addComponent(jButton1))
@@ -349,17 +460,17 @@ public class MainFrame extends javax.swing.JFrame{
               .addGroup(layout.createSequentialGroup()
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                  .addComponent(tfZmienna_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addComponent(tf_Zmienna_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                   .addComponent(jLabel2)
                   .addComponent(jButton2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                  .addComponent(tfZmienna_3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addComponent(tf_Zmienna_3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                   .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                   .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                  .addComponent(tfZmienna_4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                  .addComponent(tf_Zmienna_4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                   .addComponent(jLabel4)
                   .addComponent(jButton4)))
               .addGroup(layout.createSequentialGroup()
@@ -374,21 +485,21 @@ public class MainFrame extends javax.swing.JFrame{
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
             .addComponent(cbx_Q_0_5))
           .addGroup(layout.createSequentialGroup()
-            .addComponent(cbx_I_0)
+            .addComponent(cbx_I_0_0)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(cbx_I_1)
+            .addComponent(cbx_I_0_1)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(cbx_I_2)
+            .addComponent(cbx_I_0_2)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(cbx_I_3)
+            .addComponent(cbx_I_0_3)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(cbx_I_4)
+            .addComponent(cbx_I_0_4)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(cbx_I_5)
+            .addComponent(cbx_I_0_5)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(cbx_I_6)
+            .addComponent(cbx_I_0_6)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(cbx_I_7)))
+            .addComponent(cbx_I_0_7)))
         .addContainerGap(114, Short.MAX_VALUE))
     );
 
@@ -397,42 +508,47 @@ public class MainFrame extends javax.swing.JFrame{
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-  private void cbx_I_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbx_I_1ActionPerformed
+  private void cbx_I_0_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbx_I_0_1ActionPerformed
     System.out.println("cbx_I_1ActionPerformed");
-  }//GEN-LAST:event_cbx_I_1ActionPerformed
+  }//GEN-LAST:event_cbx_I_0_1ActionPerformed
 
-  private void tfZmienna_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfZmienna_2ActionPerformed
+  private void tf_Zmienna_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_Zmienna_2ActionPerformed
     // TODO add your handling code here:
-  }//GEN-LAST:event_tfZmienna_2ActionPerformed
+  }//GEN-LAST:event_tf_Zmienna_2ActionPerformed
 
-  private void tfZmienna_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfZmienna_3ActionPerformed
+  private void tf_Zmienna_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_Zmienna_3ActionPerformed
     // TODO add your handling code here:
-  }//GEN-LAST:event_tfZmienna_3ActionPerformed
+  }//GEN-LAST:event_tf_Zmienna_3ActionPerformed
 
-  private void tfZmienna_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfZmienna_4ActionPerformed
+  private void tf_Zmienna_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_Zmienna_4ActionPerformed
     // TODO add your handling code here:
-  }//GEN-LAST:event_tfZmienna_4ActionPerformed
+  }//GEN-LAST:event_tf_Zmienna_4ActionPerformed
 
   private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-    System.out.println(tfZmienna_1.getText());
+		try {
+			process1.setZmienna_1( Byte.parseByte(tf_Zmienna_1.getText()));
+		} catch (IOException ex) {
+			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+		}
+		System.out.println(tf_Zmienna_1.getText());
   }//GEN-LAST:event_jButton1ActionPerformed
 
   private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
   }//GEN-LAST:event_formWindowClosing
 
-  private void tfZmienna_1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tfZmienna_1PropertyChange
-  }//GEN-LAST:event_tfZmienna_1PropertyChange
+  private void tf_Zmienna_1PropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_tf_Zmienna_1PropertyChange
+  }//GEN-LAST:event_tf_Zmienna_1PropertyChange
 
-  private void tfZmienna_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tfZmienna_1ActionPerformed
+  private void tf_Zmienna_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tf_Zmienna_1ActionPerformed
 
-  }//GEN-LAST:event_tfZmienna_1ActionPerformed
+  }//GEN-LAST:event_tf_Zmienna_1ActionPerformed
 
   private void cbx_Q_0_0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbx_Q_0_0ActionPerformed
 		Q_0_0 = cbx_Q_0_0.isSelected();
 		try{
 			process1.setQ_0_0(Q_0_0);
 		}catch (IOException ex){
-			System.err.prinln(ex.getMessage());
+			System.err.println(ex.getMessage());
 		}
   }//GEN-LAST:event_cbx_Q_0_0ActionPerformed
 
@@ -441,7 +557,7 @@ public class MainFrame extends javax.swing.JFrame{
 		try{
 			process1.setQ_0_1(Q_0_1);
 		}catch (IOException ex){
-			System.err.prinln(ex.getMessage());
+			System.err.println(ex.getMessage());
 		}
   }//GEN-LAST:event_cbx_Q_0_1ActionPerformed
 
@@ -450,7 +566,7 @@ public class MainFrame extends javax.swing.JFrame{
 		try{
 			process1.setQ_0_2(Q_0_2);
 		}catch (IOException ex){
-			System.err.prinln(ex.getMessage());
+			System.err.println(ex.getMessage());
 		}  }//GEN-LAST:event_cbx_Q_0_2ActionPerformed
 
   private void cbx_Q_0_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbx_Q_0_3ActionPerformed
@@ -458,7 +574,7 @@ public class MainFrame extends javax.swing.JFrame{
 		try{
 			process1.setQ_0_3(Q_0_3);
 		}catch (IOException ex){
-			System.err.prinln(ex.getMessage());
+			System.err.println(ex.getMessage());
 		}
   }//GEN-LAST:event_cbx_Q_0_3ActionPerformed
 
@@ -467,7 +583,7 @@ public class MainFrame extends javax.swing.JFrame{
 		try{
 			process1.setQ_0_4(Q_0_4);
 		}catch (IOException ex){
-			System.err.prinln(ex.getMessage());
+			System.err.println(ex.getMessage());
 		}
   }//GEN-LAST:event_cbx_Q_0_4ActionPerformed
 
@@ -476,15 +592,39 @@ public class MainFrame extends javax.swing.JFrame{
 		try{
 			process1.setQ_0_5(Q_0_5);
 		}catch (IOException ex){
-			System.err.prinln(ex.getMessage());
+			System.err.println(ex.getMessage());
 		}
   }//GEN-LAST:event_cbx_Q_0_5ActionPerformed
 
+  private void cbx_I_0_0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbx_I_0_0ActionPerformed
+    // TODO add your handling code here:
+  }//GEN-LAST:event_cbx_I_0_0ActionPerformed
 
-	public static final String configFile = "SimaticScada.ini";
-	public static Properties config;
-	public static long timeStart;
-	public static long time_interval;
+  private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+		try {
+			process1.setZmienna_2( Short.parseShort(tf_Zmienna_2.getText()));
+		} catch (IOException ex) {
+			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+		}
+  }//GEN-LAST:event_jButton2ActionPerformed
+
+  private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+		try {
+			process1.setZmienna_3( Integer.parseInt(tf_Zmienna_3.getText()));
+		} catch (IOException ex) {
+			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+		}
+  }//GEN-LAST:event_jButton3ActionPerformed
+
+  private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+		try {
+			process1.setZmienna_4( Float.parseFloat(tf_Zmienna_4.getText()));
+		} catch (IOException ex) {
+			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+		}
+  }//GEN-LAST:event_jButton4ActionPerformed
+
+
 
 	/**
 	 * @param args the command line arguments
@@ -574,14 +714,14 @@ public class MainFrame extends javax.swing.JFrame{
 
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JCheckBox cbx_I_0;
-  private javax.swing.JCheckBox cbx_I_1;
-  private javax.swing.JCheckBox cbx_I_2;
-  private javax.swing.JCheckBox cbx_I_3;
-  private javax.swing.JCheckBox cbx_I_4;
-  private javax.swing.JCheckBox cbx_I_5;
-  private javax.swing.JCheckBox cbx_I_6;
-  private javax.swing.JCheckBox cbx_I_7;
+  private javax.swing.JCheckBox cbx_I_0_0;
+  private javax.swing.JCheckBox cbx_I_0_1;
+  private javax.swing.JCheckBox cbx_I_0_2;
+  private javax.swing.JCheckBox cbx_I_0_3;
+  private javax.swing.JCheckBox cbx_I_0_4;
+  private javax.swing.JCheckBox cbx_I_0_5;
+  private javax.swing.JCheckBox cbx_I_0_6;
+  private javax.swing.JCheckBox cbx_I_0_7;
   private javax.swing.JCheckBox cbx_Q_0_0;
   private javax.swing.JCheckBox cbx_Q_0_1;
   private javax.swing.JCheckBox cbx_Q_0_2;
@@ -596,10 +736,10 @@ public class MainFrame extends javax.swing.JFrame{
   private javax.swing.JLabel jLabel2;
   private javax.swing.JLabel jLabel3;
   private javax.swing.JLabel jLabel4;
-  private javax.swing.JTextField tfZmienna_1;
-  private javax.swing.JTextField tfZmienna_2;
-  private javax.swing.JTextField tfZmienna_3;
-  private javax.swing.JTextField tfZmienna_4;
+  private javax.swing.JTextField tf_Zmienna_1;
+  private javax.swing.JTextField tf_Zmienna_2;
+  private javax.swing.JTextField tf_Zmienna_3;
+  private javax.swing.JTextField tf_Zmienna_4;
   private org.jdesktop.beansbinding.BindingGroup bindingGroup;
   // End of variables declaration//GEN-END:variables
 }

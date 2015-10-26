@@ -16,6 +16,7 @@ import pjpl.s7.command.ResponseRaportFull;
 import pjpl.s7.command.ResponseReal;
 import pjpl.s7.common.ResponseCode;
 import pjpl.s7.var.Variables;
+import pjpl.scada.var.Variables1;
 
 /**
  * @author Piotr Janczura <piotr@janczura.pl>
@@ -40,7 +41,7 @@ public abstract class Process implements Runnable, Observer{
 	// interface
 	//------------------------------------------------------------------------------
 
-	public abstract void onVariableChange(short codeVar);
+	public abstract void onVariableChange(Variables1 variables, short codeVar);
 
 	@Override
 	public void run() {
@@ -82,10 +83,11 @@ public abstract class Process implements Runnable, Observer{
 						break;
 				}
 			}
-		} else if( object instanceof Variables){
+		} else if( object instanceof Variables1){
 			// Variables zawsze infrmuje o zmianie podając kod zmienionej zmiennej
 			short code = Short.parseShort(attrybute.toString());
-			onVariableChange(code);
+			System.out.println(String.format("varCode = 0x%04X",code));
+			onVariableChange( (Variables1)object, code);
 		}
 	}
 	public abstract void onResponseRaportFull(ResponseRaportFull response);

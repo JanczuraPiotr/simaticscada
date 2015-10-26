@@ -223,16 +223,16 @@ public class Bits {
 					);
 	}
 	public static boolean get(byte var, byte bitNr){
-		return ( ( var & maskByte[bitNr] ) > 0 ? true : false ) ;
+		return ( ( var & maskByte[bitNr] )  != 0 ) ;
 	}
 	public static boolean get(short var, byte bitNr){
-		return ( ( var & maskShort[bitNr] ) > 0 ? true : false ) ;
+		return ( ( var & maskShort[bitNr] ) != 0 ) ;
 	}
 	public static boolean get(int var, byte bitNr){
-		return ( ( var & maskInt[bitNr] ) > 0 ? true : false ) ;
+		return ( ( var & maskInt[bitNr] ) != 0 ) ;
 	}
 	public static boolean get(long var, byte bitNr){
-		return ( ( var & maskLong[bitNr] ) > 0 ? true : false ) ;
+		return ( ( var & maskLong[bitNr] ) != 0 ) ;
 	}
 	public static boolean get(byte[] var, byte bitNr){
 		// @todo rzucić wyjątek gdy bitNie nie mieści się w buforze
@@ -247,7 +247,7 @@ public class Bits {
 		// którym bitem jest w bajcie
 		int bitInByte = bitNr % 8;
 
-		return ( ( var[bitInBuffByte] & maskByte[bitInByte] ) > 0 ? true : false ) ;
+		return ( ( var[bitInBuffByte] & maskByte[bitInByte] ) != 0 ) ;
 	}
 	public static byte on(byte var, byte bitNr){
 		return (byte) (var | maskByte[bitNr]);

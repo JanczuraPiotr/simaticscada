@@ -4,12 +4,17 @@ import Moka7.S7;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Observer;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import pjpl.s7.command.BitSwitch;
 import pjpl.s7.command.Command;
 import pjpl.s7.command.CommandRaportFull;
+import pjpl.s7.command.D_SetByte;
+import pjpl.s7.command.D_SetDInt;
+import pjpl.s7.command.D_SetInt;
+import pjpl.s7.command.D_SetReal;
 import pjpl.s7.command.ResponseBuff;
 import pjpl.s7.command.ResponseByte;
 import pjpl.s7.command.ResponseDInt;
@@ -32,7 +37,6 @@ public class Process1 extends Process{
 	private byte bit = 3;
 	private long prevStep;
 	private long thisStep;
-//	protected final DateFormat datePCFormat = new SimpleDateFormat(pjpl.scada.run.MainFrame.config.getProperty("format_dateMS"));
 
 	public Process1(byte processId, LinkedBlockingQueue<Command> commandQueue) {
 		super(processId, commandQueue);
@@ -40,36 +44,79 @@ public class Process1 extends Process{
 		variables = new Variables1(this);
 	}
 
+	public void addVariablesObserver(Observer observer){
+		variables.addObserver(observer);
+	}
+	public void setZmienna_1(byte var) throws IOException{
+		variables.setZmienna_1(var);
+		sendCommand(new D_SetByte(getProcessId(), VarCode.ZMIENNA_1, var, this));
+	}
+	public void setZmienna_2(short var) throws IOException{
+		variables.setZmienna_2(var);
+		sendCommand(new D_SetInt(getProcessId(), VarCode.ZMIENNA_2, var, this));
+	}
+	public void setZmienna_3(int var) throws IOException{
+		variables.setZmienna_3(var);
+		sendCommand(new D_SetDInt(getProcessId(), VarCode.ZMIENNA_3, var, this));
+	}
+	public void setZmienna_4(float var) throws IOException{
+		variables.setZmienna_4(var);
+		sendCommand(new D_SetReal(getProcessId(), VarCode.ZMIENNA_4, var, this));
+	}
+
+	public byte getZmienna_1(){
+		return variables.getZmienna_1();
+	}
+	public short getZmienna_2(){
+		return variables.getZmienna_2();
+	}
+	public int getZmienna_3(){
+		return variables.getZmienna_3();
+	}
+	public float getZmienna_4(){
+		return variables.getZmienna_4();
+	}
+
+	public boolean getI_0_0(){return variables.getI_0_0();}
+	public boolean getI_0_1(){return variables.getI_0_1();}
+	public boolean getI_0_2(){return variables.getI_0_2();}
+	public boolean getI_0_3(){return variables.getI_0_3();}
+	public boolean getI_0_4(){return variables.getI_0_4();}
+	public boolean getI_0_5(){return variables.getI_0_5();}
+	public boolean getI_0_6(){return variables.getI_0_6();}
+	public boolean getI_0_7(){return variables.getI_0_7();}
+
 	public void setQ_0_0(boolean b) throws IOException{
-		System.out.println(String.format("S7.Q = 0x%02X", S7.Q));
 		variables.setQ_0_0(b);
 		sendCommand(new BitSwitch(getProcessId(),S7.Q, VarCode.Q_0, Bits.BIT_0, this));
 	}
 	public void setQ_0_1(boolean b) throws IOException{
-		System.out.println(String.format("S7.Q = 0x%02X", S7.Q));
 		variables.setQ_0_1(b);
 		sendCommand(new BitSwitch(getProcessId(),S7.Q, VarCode.Q_0, Bits.BIT_1, this));
 	}
 	public void setQ_0_2(boolean b) throws IOException{
-		System.out.println(String.format("S7.Q = 0x%02X", S7.Q));
 		variables.setQ_0_2(b);
 		sendCommand(new BitSwitch(getProcessId(),S7.Q, VarCode.Q_0, Bits.BIT_2, this));
 	}
 	public void setQ_0_3(boolean b) throws IOException{
-		System.out.println(String.format("S7.Q = 0x%02X", S7.Q));
 		variables.setQ_0_3(b);
 		sendCommand(new BitSwitch(getProcessId(),S7.Q, VarCode.Q_0, Bits.BIT_3, this));
 	}
 	public void setQ_0_4(boolean b) throws IOException{
-		System.out.println(String.format("S7.Q = 0x%02X", S7.Q));
 		variables.setQ_0_4(b);
 		sendCommand(new BitSwitch(getProcessId(),S7.Q, VarCode.Q_0, Bits.BIT_4, this));
 	}
 	public void setQ_0_5(boolean b) throws IOException{
-		System.out.println(String.format("S7.Q = 0x%02X", S7.Q));
 		variables.setQ_0_5(b);
 		sendCommand(new BitSwitch(getProcessId(),S7.Q, VarCode.Q_0, Bits.BIT_5, this));
 	}
+
+	public boolean getQ_0_0(){return variables.getQ_0_0();}
+	public boolean getQ_0_1(){return variables.getQ_0_1();}
+	public boolean getQ_0_2(){return variables.getQ_0_2();}
+	public boolean getQ_0_3(){return variables.getQ_0_3();}
+	public boolean getQ_0_4(){return variables.getQ_0_4();}
+	public boolean getQ_0_5(){return variables.getQ_0_5();}
 
 	@Override
 	protected void steep() {
@@ -128,32 +175,28 @@ public class Process1 extends Process{
 
 
 	@Override
-	public void onVariableChange(short codeVar) {
-		System.out.println(String.format("kod zmienionej zmiennej = 0x%04X ", codeVar) );
-//		switch(codeVar){
-//			case VarCode.ZMIENNA_1:break;
-//			case VarCode.ZMIENNA_2:break;
-//			case VarCode.ZMIENNA_3:break;
-//			case VarCode.ZMIENNA_4:break;
-//			case VarCode.I_0   :   break;
-//			case VarCode.I_0_0 :   break;
-//			case VarCode.I_0_1 :   break;
-//			case VarCode.I_0_2 :   break;
-//			case VarCode.I_0_3 :   break;
-//			case VarCode.I_0_4 :   break;
-//			case VarCode.I_0_5 :   break;
-//			case VarCode.I_0_6 :   break;
-//			case VarCode.I_0_7 :   break;
-//			case VarCode.Q_0   :   break;
-//			case VarCode.Q_0_0 :   break;
-//			case VarCode.Q_0_1 :   break;
-//			case VarCode.Q_0_2 :   break;
-//			case VarCode.Q_0_3 :   break;
-//			case VarCode.Q_0_4 :   break;
-//			case VarCode.Q_0_5 :   break;
-//			case VarCode.Q_0_6 :   break;
-//			case VarCode.Q_0_7 :   break;
-//		}
+	public void onVariableChange(Variables1 variables, short codeVar) {
+//		System.out.println(String.format("kod zmienionej zmiennej = 0x%04X ", codeVar) );
+		switch(codeVar){
+			case VarCode.ZMIENNA_1:break;
+			case VarCode.ZMIENNA_2:break;
+			case VarCode.ZMIENNA_3:break;
+			case VarCode.ZMIENNA_4:break;
+			case VarCode.I_0_0 :   break;
+			case VarCode.I_0_1 :   break;
+			case VarCode.I_0_2 :   break;
+			case VarCode.I_0_3 :   break;
+			case VarCode.I_0_4 :   break;
+			case VarCode.I_0_5 :   break;
+			case VarCode.I_0_6 :   break;
+			case VarCode.I_0_7 :   break;
+			case VarCode.Q_0_0 :   break;
+			case VarCode.Q_0_1 :   break;
+			case VarCode.Q_0_2 :   break;
+			case VarCode.Q_0_3 :   break;
+			case VarCode.Q_0_4 :   break;
+			case VarCode.Q_0_5 :   break;
+		}
 	}
 
 	private Variables1 variables;
