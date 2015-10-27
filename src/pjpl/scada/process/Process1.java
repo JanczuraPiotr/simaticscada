@@ -122,12 +122,7 @@ public class Process1 extends Process{
 	protected void steep() {
 		thisStep = System.currentTimeMillis();
 		try {
-//			System.out.println( datePCFormat.format(thisStep) +" przerwa od poprzedniego wywołania : "+ String.format("%4d", thisStep - prevStep) + " [ms]");
 			sendCommand( new CommandRaportFull(ConstProcess.PROCESS1_ID, this));
-//			sendCommand( new Q_SetByte(ConstProcess.PROCESS1_ID, (short)0, bit++, this) );
-//			if(bit > 32){
-//				bit = 0;
-//			}
 		} catch (IOException ex) {
 			Logger.getLogger(Process1.class.getName()).log(Level.SEVERE, null, ex);
 		}finally{
@@ -138,7 +133,6 @@ public class Process1 extends Process{
 	@Override
 	public void onResponseRaportFull(ResponseRaportFull response) {
 		variables.parseResponseRaportFull(response);
-//		System.out.println(String.format("I = 0x%02X Q = 0x%02X", response.getI_0(), response.getQ_0()));
 	}
 
 	@Override
@@ -176,27 +170,26 @@ public class Process1 extends Process{
 
 	@Override
 	public void onVariableChange(Variables1 variables, short codeVar) {
-//		System.out.println(String.format("kod zmienionej zmiennej = 0x%04X ", codeVar) );
-		switch(codeVar){
-			case VarCode.ZMIENNA_1:break;
-			case VarCode.ZMIENNA_2:break;
-			case VarCode.ZMIENNA_3:break;
-			case VarCode.ZMIENNA_4:break;
-			case VarCode.I_0_0 :   break;
-			case VarCode.I_0_1 :   break;
-			case VarCode.I_0_2 :   break;
-			case VarCode.I_0_3 :   break;
-			case VarCode.I_0_4 :   break;
-			case VarCode.I_0_5 :   break;
-			case VarCode.I_0_6 :   break;
-			case VarCode.I_0_7 :   break;
-			case VarCode.Q_0_0 :   break;
-			case VarCode.Q_0_1 :   break;
-			case VarCode.Q_0_2 :   break;
-			case VarCode.Q_0_3 :   break;
-			case VarCode.Q_0_4 :   break;
-			case VarCode.Q_0_5 :   break;
-		}
+//		switch(codeVar){
+//			case VarCode.ZMIENNA_1:break;
+//			case VarCode.ZMIENNA_2:break;
+//			case VarCode.ZMIENNA_3:break;
+//			case VarCode.ZMIENNA_4:break;
+//			case VarCode.I_0_0 :   break;
+//			case VarCode.I_0_1 :   break;
+//			case VarCode.I_0_2 :   break;
+//			case VarCode.I_0_3 :   break;
+//			case VarCode.I_0_4 :   break;
+//			case VarCode.I_0_5 :   break;
+//			case VarCode.I_0_6 :   break;
+//			case VarCode.I_0_7 :   break;
+//			case VarCode.Q_0_0 :   break;
+//			case VarCode.Q_0_1 :   break;
+//			case VarCode.Q_0_2 :   break;
+//			case VarCode.Q_0_3 :   break;
+//			case VarCode.Q_0_4 :   break;
+//			case VarCode.Q_0_5 :   break;
+//		}
 	}
 
 	private Variables1 variables;

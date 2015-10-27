@@ -250,7 +250,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel4">
       <Properties>
-        <Property name="text" type="java.lang.String" value="zmienna Byte"/>
+        <Property name="text" type="java.lang.String" value="zmienna Real"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="tf_Zmienna_2">
@@ -279,6 +279,9 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="tf_Zmienna_4ActionPerformed"/>
       </Events>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value=""/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JCheckBox" name="cbx_Q_0_0">
       <Properties>

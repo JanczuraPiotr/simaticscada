@@ -86,7 +86,6 @@ public abstract class Process implements Runnable, Observer{
 		} else if( object instanceof Variables1){
 			// Variables zawsze infrmuje o zmianie podając kod zmienionej zmiennej
 			short code = Short.parseShort(attrybute.toString());
-			System.out.println(String.format("varCode = 0x%04X",code));
 			onVariableChange( (Variables1)object, code);
 		}
 	}

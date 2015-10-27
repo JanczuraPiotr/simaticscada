@@ -1,6 +1,5 @@
 package pjpl.s7.command;
 
-import Moka7.S7;
 import java.io.IOException;
 import java.util.Observer;
 import pjpl.s7.common.CommandCode;
@@ -17,8 +16,6 @@ public class BitSwitch extends Command{
 		this.varCode = varCode;
 		this.bitNr = bitNr;
 		init();
-//		System.out.println(String.format("memType = 0x%02X", memType));
-//		System.out.println(String.format("this.memType = 0x%02X", this.memType));
 	}
 
 	@Override

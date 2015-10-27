@@ -27,17 +27,16 @@ public class ServerCommandThread extends Thread{
 	}
 
 	public void run(){
-		Command command;
-		CommandResponse response;
+
 		while(true){
 			try {
-//				program1();
-//				programNull();
+
 				command = commandQueue.take();
 				command.action(sis,sos,commandResponseBuilder);
 
 			} catch (SocketException ex){
 				System.err.println("Utracono połączenie z serverem");
+				// @todo próba odsyskania kończy się niepowodzeniem przez commandQueue. komendy mają referencje do utraconych strumieni.
 				try {
 					System.err.println("Próba odzyskania połączena z serverem");
 					initConnection();
@@ -53,14 +52,16 @@ public class ServerCommandThread extends Thread{
 		}
 	}
 
-	private LinkedBlockingQueue<Command> commandQueue;
-	private CommandResponseBuilder commandResponseBuilder;
-
 	private void initConnection() throws IOException{
 		socketSimaticServer = new Socket(ip, port);
 		sis = socketSimaticServer.getInputStream();
 		sos = socketSimaticServer.getOutputStream();
 	}
+
+	private	Command command;
+	private	CommandResponse response;
+	private LinkedBlockingQueue<Command> commandQueue;
+	private CommandResponseBuilder commandResponseBuilder;
 	private Socket socketSimaticServer;
 	private InputStream sis;
 	private OutputStream sos;

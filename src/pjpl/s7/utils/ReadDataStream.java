@@ -28,7 +28,6 @@ public abstract class ReadDataStream {
 			if ( ( inputVar = bis.read() ) >= 0 ){
 				inputBuff[i] = (byte)( inputVar & 0x000000FF );
 			}else{
-				System.err.println(String.format("inputVar = 0x%02X , varSize = %d ", inputVar, varSize ));
 				throw new IOException("błąd przy odczycie bajtu ze strumienia");
 			}
 		}

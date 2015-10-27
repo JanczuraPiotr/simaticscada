@@ -52,7 +52,6 @@ public class MainFrame extends javax.swing.JFrame{
 
 		}
 		public void update(Observable object, Object attrybute) {
-//			System.out.println("object = "+object+" attrybut = "+attrybute);
 			if( object instanceof Variables1){
 				onVariableChange( (Variables1)object, Short.parseShort(attrybute.toString()));
 			}
@@ -78,9 +77,6 @@ public class MainFrame extends javax.swing.JFrame{
 				case VarCode.Q_0_4 :    cbx_Q_0_4.setSelected(variables.getQ_0_4()); break;
 				case VarCode.Q_0_5 :    cbx_Q_0_5.setSelected(variables.getQ_0_5()); break;
 			}
-		}
-		public void setCBX_Q_0_0(boolean b){
-			cbx_Q_0_0.setSelected(b);
 		}
 	}
 	private Observator observator ;
@@ -281,7 +277,7 @@ public class MainFrame extends javax.swing.JFrame{
 
     jLabel3.setText("zmienna DInt");
 
-    jLabel4.setText("zmienna Byte");
+    jLabel4.setText("zmienna Real");
 
     tf_Zmienna_2.setAutoscrolls(false);
     tf_Zmienna_2.setName("tf_zmienna_2"); // NOI18N
