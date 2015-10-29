@@ -4,7 +4,6 @@ import java.util.Observer;
 import pjpl.s7.command.ResponseRaportFull;
 import pjpl.s7.common.VarCode;
 import pjpl.s7.utils.Bits;
-import pjpl.scada.process.Process1;
 
 /**
  * @todo opis
@@ -56,7 +55,7 @@ public class Variables1 extends java.util.Observable implements pjpl.s7.var.Vari
 	}
 
 	public byte getZmienna_1(){
-		return zmienna_1;
+			return zmienna_1;
 	}
 	public short getZmienna_2(){
 		return zmienna_2;
@@ -263,4 +262,5 @@ public class Variables1 extends java.util.Observable implements pjpl.s7.var.Vari
 	private boolean Q_0_3 = false;
 	private boolean Q_0_4 = false;
 	private boolean Q_0_5 = false;
+
 }

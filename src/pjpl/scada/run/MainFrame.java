@@ -52,30 +52,35 @@ public class MainFrame extends javax.swing.JFrame{
 
 		}
 		public void update(Observable object, Object attrybute) {
+			System.out.println("update object type "+object.getClass());
 			if( object instanceof Variables1){
 				onVariableChange( (Variables1)object, Short.parseShort(attrybute.toString()));
 			}
 		}
-		public void onVariableChange(Variables1 variables, short codeVar) {
+		public void onVariableChange(Variables1 variables1, short codeVar) {
+			System.out.println("MainFrame.onVariableChange");
 			switch(codeVar){
+
 				case VarCode.ZMIENNA_1: tf_Zmienna_1.setText(String.valueOf(process1.getZmienna_1())); break;
 				case VarCode.ZMIENNA_2: tf_Zmienna_2.setText(String.valueOf(process1.getZmienna_2())); break;
 				case VarCode.ZMIENNA_3: tf_Zmienna_3.setText(String.valueOf(process1.getZmienna_3())); break;
 				case VarCode.ZMIENNA_4: tf_Zmienna_4.setText(String.valueOf(process1.getZmienna_4())); break;
-				case VarCode.I_0_0 :    cbx_I_0_0.setSelected(variables.getI_0_0());break;
-				case VarCode.I_0_1 :    cbx_I_0_1.setSelected(variables.getI_0_1());break;
-				case VarCode.I_0_2 :    cbx_I_0_2.setSelected(variables.getI_0_2());break;
-				case VarCode.I_0_3 :    cbx_I_0_3.setSelected(variables.getI_0_3());break;
-				case VarCode.I_0_4 :    cbx_I_0_4.setSelected(variables.getI_0_4());break;
-				case VarCode.I_0_5 :    cbx_I_0_5.setSelected(variables.getI_0_5());break;
-				case VarCode.I_0_6 :    cbx_I_0_6.setSelected(variables.getI_0_6());break;
-				case VarCode.I_0_7 :    cbx_I_0_7.setSelected(variables.getI_0_7());break;
-				case VarCode.Q_0_0 :    cbx_Q_0_0.setSelected(variables.getQ_0_0()); break;
-				case VarCode.Q_0_1 :    cbx_Q_0_1.setSelected(variables.getQ_0_1()); break;
-				case VarCode.Q_0_2 :    cbx_Q_0_2.setSelected(variables.getQ_0_2()); break;
-				case VarCode.Q_0_3 :    cbx_Q_0_3.setSelected(variables.getQ_0_3()); break;
-				case VarCode.Q_0_4 :    cbx_Q_0_4.setSelected(variables.getQ_0_4()); break;
-				case VarCode.Q_0_5 :    cbx_Q_0_5.setSelected(variables.getQ_0_5()); break;
+
+				case VarCode.I_0_0 :    cbx_I_0_0.setSelected(process1.getI_0_0());break;
+				case VarCode.I_0_1 :    cbx_I_0_1.setSelected(process1.getI_0_1());break;
+				case VarCode.I_0_2 :    cbx_I_0_2.setSelected(process1.getI_0_2());break;
+				case VarCode.I_0_3 :    cbx_I_0_3.setSelected(process1.getI_0_3());break;
+				case VarCode.I_0_4 :    cbx_I_0_4.setSelected(process1.getI_0_4());break;
+				case VarCode.I_0_5 :    cbx_I_0_5.setSelected(process1.getI_0_5());break;
+				case VarCode.I_0_6 :    cbx_I_0_6.setSelected(process1.getI_0_6());break;
+				case VarCode.I_0_7 :    cbx_I_0_7.setSelected(process1.getI_0_7());break;
+
+				case VarCode.Q_0_0 :    cbx_Q_0_0.setSelected(process1.getQ_0_0()); break;
+				case VarCode.Q_0_1 :    cbx_Q_0_1.setSelected(process1.getQ_0_1()); break;
+				case VarCode.Q_0_2 :    cbx_Q_0_2.setSelected(process1.getQ_0_2()); break;
+				case VarCode.Q_0_3 :    cbx_Q_0_3.setSelected(process1.getQ_0_3()); break;
+				case VarCode.Q_0_4 :    cbx_Q_0_4.setSelected(process1.getQ_0_4()); break;
+				case VarCode.Q_0_5 :    cbx_Q_0_5.setSelected(process1.getQ_0_5()); break;
 			}
 		}
 	}
@@ -113,7 +118,7 @@ public class MainFrame extends javax.swing.JFrame{
 
 		process1 = new Process1(ConstProcess.PROCESS1_ID, commandQueue);
 		processes.put(process1.getProcessId(), process1 );
-//		variables = process1.getVariables();
+
 		// procesy
 		//------------------------------------------------------------------------------
 
@@ -154,23 +159,6 @@ public class MainFrame extends javax.swing.JFrame{
 			Logger.getLogger(SimaticScada.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
-//	private Observator createObserver(){
-
-//		class Obs implements Observer{
-//			public Obs() {
-//			}
-//			public void update(Observable object, Object attrybute) {
-//
-//			}
-//
-//			public void setCBX_Q_0_0(boolean b){
-//				cbx_Q_0_0.setSelected(b);
-//			}
-//		}
-//
-//		return new Obs();
-//	}
 
 	/**
 	 * This method is called from within the constructor to initialize the form. WARNING: Do NOT modify this code. The
@@ -679,7 +667,7 @@ public class MainFrame extends javax.swing.JFrame{
 
 	}
 
-//	public  Variables1 variables;
+//	public  Variables1 process1;
 	private static HashMap<Byte, pjpl.s7.process.Process> processes;
 	private static ServerCommandThread connectThread;
 	private static Process1 process1;

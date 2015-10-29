@@ -3,8 +3,6 @@ package pjpl.s7.command;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import pjpl.s7.utils.ReadDataStream;
 
 /**
@@ -25,6 +23,7 @@ public class ResponseRaportFull extends CommandResponse{
 		startQ = startI + buffILength;
 		buffQLength = ReadDataStream.readInt(is);
 		zmienna_1 = ReadDataStream.readByte(is);
+		ReadDataStream.readByte(is); // @todo po odczycie bajtu ze strumienia należy przeskoczyć o jedną pozycję bo informacja o wartości zmiennej zurzywa dwie komórki pamięci
 		zmienna_2 = ReadDataStream.readShort(is);
 		zmienna_3 = ReadDataStream.readInt(is);
 		zmienna_4 = ReadDataStream.readFloat(is);
