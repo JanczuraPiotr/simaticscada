@@ -1,4 +1,5 @@
-/nbproject/
-/dist/
-nbbuild.xml
 /build/
+/dist/
+/nbproject/
+nbbuild.xml
+manifest.mf
