@@ -156,7 +156,7 @@ public class MainFrame extends javax.swing.JFrame{
 			//------------------------------------------------------------------------------
 
 		} catch (IOException ex) {
-			Logger.getLogger(SimaticScada.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
@@ -655,14 +655,21 @@ public class MainFrame extends javax.swing.JFrame{
 
 
 	private static void configInit(){
+			FileReader configReader = null;
 		try {
-			FileReader configReader = new FileReader(configFile);
+			configReader = new FileReader(configFile);
 			config = new pjpl.s7.utils.Properties(new ConfigDefault());
 			config.load(configReader);
 		} catch (FileNotFoundException ex) {
-			Logger.getLogger(SimaticScada.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
 		} catch (IOException ex) {
-			Logger.getLogger(SimaticScada.class.getName()).log(Level.SEVERE, null, ex);
+			Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+		} finally {
+			try {
+				configReader.close();
+			} catch (IOException ex) {
+				Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
 
 	}
