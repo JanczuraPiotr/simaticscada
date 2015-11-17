@@ -9,7 +9,7 @@ public class ConfigDefault extends Properties{
 	public ConfigDefault(){
 
 		// Sieć.
-		setProperty("simatic_server_ip"    , "192.168.1.104");
+		setProperty("simatic_server_ip"    , "192.168.1.11");
 		setProperty("simatic_server_port"  , "9001");
 
 		// Procesy
