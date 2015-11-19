@@ -1,6 +1,5 @@
 package pjpl.s7.net;
 
-import Moka7.S7;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,6 +25,7 @@ public class ServerCommandThread extends Thread{
 		this.commandResponseBuilder = new CommandResponseBuilder(this.socketSimaticServer.getInputStream(), this.socketSimaticServer.getOutputStream());
 	}
 
+	@Override
 	public void run(){
 
 		while(true){
@@ -60,13 +60,13 @@ public class ServerCommandThread extends Thread{
 
 	private	Command command;
 	private	CommandResponse response;
-	private LinkedBlockingQueue<Command> commandQueue;
-	private CommandResponseBuilder commandResponseBuilder;
+	private final LinkedBlockingQueue<Command> commandQueue;
+	private final CommandResponseBuilder commandResponseBuilder;
 	private Socket socketSimaticServer;
 	private InputStream sis;
 	private OutputStream sos;
-	private String ip;
-	private int port;
+	private final String ip;
+	private final int port;
 
 
 	//------------------------------------------------------------------------------

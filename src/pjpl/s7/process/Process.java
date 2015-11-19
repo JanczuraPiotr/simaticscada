@@ -28,18 +28,12 @@ public abstract class Process implements Runnable, Observer{
 		this.setCommandQueue(commandQueue);
 	}
 
-	//------------------------------------------------------------------------------
-	// interface
-
 	public byte getProcessId(){
 		return processId;
 	}
 	public void sendCommand(Command command){
 		commandQueue.add(command);
 	}
-
-	// interface
-	//------------------------------------------------------------------------------
 
 	public abstract void onVariableChange(Variables1 variables, short codeVar);
 
@@ -106,17 +100,10 @@ public abstract class Process implements Runnable, Observer{
 	protected void setCommandQueue( LinkedBlockingQueue<Command> commandQueue){
 		this.commandQueue = commandQueue;
 	}
-
-	//------------------------------------------------------------------------------
-	// atrybuty chronione
-
 	/**
 	 * Zarządza kopiami zmiennych z SimaticServer.
 	 */
 	protected Variables variables;
-
-	//------------------------------------------------------------------------------
-	// atrybutye prywatne
 
 	private byte processId;
 	private boolean doRun = true;

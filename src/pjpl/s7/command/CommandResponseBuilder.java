@@ -12,6 +12,12 @@ import pjpl.s7.utils.ReadDataStream;
  * @author Piotr Janczura <piotr@janczura.pl>
  */
 public class CommandResponseBuilder {
+	protected byte processId;
+	protected short commandCode;
+	protected short responseCode;
+	private final InputStream is;
+	private final OutputStream os;
+
 	public CommandResponseBuilder(InputStream is, OutputStream os){
 		this.is = is;
 		this.os = os;
@@ -47,11 +53,4 @@ public class CommandResponseBuilder {
 		return null;
 	}
 
-
-	protected byte processId;
-	protected short commandCode;
-	protected short responseCode;
-
-	private InputStream is;
-	private OutputStream os;
 }

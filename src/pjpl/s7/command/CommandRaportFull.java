@@ -6,6 +6,8 @@ import pjpl.s7.common.CommandCode;
 import pjpl.s7.utils.BigEndianInArray;
 
 /**
+ * Proœba o podanie stanu wszystkich zmiennych procesu
+ *
  * @author Piotr Janczura <piotr@janczura.pl>
  */
 public class CommandRaportFull extends Command{

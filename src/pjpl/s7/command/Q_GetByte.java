@@ -6,10 +6,10 @@ import pjpl.s7.common.CommandCode;
 import pjpl.s7.utils.BigEndianInArray;
 
 /**
- * @todo opis
  * @author Piotr Janczura <piotr@janczura.pl>
  */
 public class Q_GetByte extends Command{
+	private short portGroup;
 
 	public Q_GetByte(byte processId, short portGroup, Observer observer) throws IOException {
 		super(processId, observer);
@@ -33,6 +33,4 @@ public class Q_GetByte extends Command{
 		BigEndianInArray._byte(getProcessId(), buff, 2);
 		BigEndianInArray._short(portGroup, buff, 4);
 	}
-
-	private short portGroup;
 }

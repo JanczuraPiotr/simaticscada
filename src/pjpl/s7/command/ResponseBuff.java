@@ -7,9 +7,11 @@ import pjpl.s7.utils.ReadDataStream;
 
 /**
  *
- * @author piotr
+ * @author Piotr Janczura <piotr@janczura.pl>
  */
 public class ResponseBuff extends CommandResponse{
+	private int buffSize;
+	private byte[] buff;
 
 	public ResponseBuff(byte processId, short commandCode, short responseCode, InputStream is, OutputStream os) throws IOException {
 		super(processId, commandCode, responseCode, is, os);
@@ -28,6 +30,4 @@ public class ResponseBuff extends CommandResponse{
 		is.read(buff, 0, buffSize);
 	}
 
-	private int buffSize;
-	private byte[] buff;
 }

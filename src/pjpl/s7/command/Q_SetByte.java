@@ -6,10 +6,11 @@ import pjpl.s7.common.CommandCode;
 import pjpl.s7.utils.BigEndianInArray;
 
 /**
- * @todo opis
  * @author Piotr Janczura <piotr@janczura.pl>
  */
 public class Q_SetByte extends Command{
+	private final short portGroup;
+	private final byte varVal;
 
 	public Q_SetByte(byte processId, short portGroup, byte varVal, Observer observer)throws IOException {
 		super(processId, observer);
@@ -37,6 +38,4 @@ public class Q_SetByte extends Command{
 
 	}
 
-	private short portGroup;
-	private byte varVal;
 }

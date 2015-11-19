@@ -8,7 +8,7 @@ import java.util.Observer;
 
 /**
  * Komenda wysyłana do procesu.
- * Na podstawie atrybutów komend pochodnych tworzy strumień bajtowy zrzutowany na string.
+ * Na podstawie atrybutów komend pochodnych tworzy strumień bajtowy rzutowany na string.
  *
  * Domyślny format bufora - stała zawartość dla każdego pochodnego Command
  * buff[0]
@@ -18,9 +18,27 @@ import java.util.Observer;
  * jeżeli 0xff = buff[0] - komenda dotyczy Klienta. Nie jest tym samym co odpowiedź na komendę.
  *
  * W zależności od klasy pochodnej mogą być dołączane kolejne parametry definiowane w klasach pochgodnych
+ *
  * @author Piotr Janczura <piotr@janczura.pl>
  */
 public abstract class Command extends Observable{
+	/**
+	 * Spakowane atrybuty komendy
+	 */
+	protected byte[] buff;
+	protected int buffSize;
+	private CommandResponse commandResponse = null;
+
+	/**
+	 * Identyfikator procesu, który powinien wykonać komendę
+	 * Wartość zmiennej przekazywana jest w parametrach komendy w buforze za kodem Komendy.
+	 */
+	private final byte processId;
+	/**
+	 * Gniazdo do SimaticServer
+	 */
+	private OutputStream os;
+	private InputStream is;
 
 
 	public Command(byte processId, Observer observer) throws IOException{
@@ -28,8 +46,6 @@ public abstract class Command extends Observable{
 		this.addObserver(observer);
 		init();
 	}
-	//------------------------------------------------------------------------------
-	// interfejs
 
 	public void action(InputStream is, OutputStream os, CommandResponseBuilder responseBuilder) throws IOException{
 		if( commandResponse == null ){
@@ -46,6 +62,7 @@ public abstract class Command extends Observable{
 	}
 	/**
 	 * Zwraca kod komendy obsługiwanej przez obiekt
+	 * @return
 	 */
 	public abstract short getCommandCode();
 	public byte[] getCommandBuff(){
@@ -54,14 +71,6 @@ public abstract class Command extends Observable{
 	public int getCommandBuffSize(){
 		return buffSize;
 	}
-
-
-	// interfejs
-	//------------------------------------------------------------------------------
-
-	//------------------------------------------------------------------------------
-	// metody chronione
-
 	/**
 	 * Nadaje wartość zmiennej commandBuffSize.
 	 */
@@ -75,45 +84,9 @@ public abstract class Command extends Observable{
 	 *			. BigEndian::byteToPack($this->getJakasKolejnaWartosc());
 	 */
 	protected abstract void buildCommandBuff();
-
-	// metody chronione
-	//------------------------------------------------------------------------------
-
-	//------------------------------------------------------------------------------
-	// metody prywatne
-
 	protected void init(){
 		calculateBuffSize();
 		buff = new byte[buffSize];
 		buildCommandBuff();
 	}
-
-	// metody prywatne
-	//------------------------------------------------------------------------------
-
-	//------------------------------------------------------------------------------
-	// atrybuty chronone
-
-	/**
-	 * Spakowane atrybuty komendy
-	 */
-	protected byte[] buff;
-	protected int buffSize;
-
-	//------------------------------------------------------------------------------
-	// atrybuty prywatne
-
-
-	private CommandResponse commandResponse = null;
-
-	/**
-	 * Identyfikator procesu, który powinien wykonać komendę
-	 * Wartość zmiennej przekazywana jest w parametrach komendy w buforze za kodem Komendy.
-	 */
-	private byte processId;
-	/**
-	 * Gniazdo do SimaticServer
-	 */
-	private OutputStream os;
-	private InputStream is;
 }

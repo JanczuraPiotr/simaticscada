@@ -5,24 +5,12 @@ package pjpl.s7.common;
  */
 public class TypeCode {
 
-//	public static final short NN    = (short)  0x0000; // NoName - dowolenego nie określonego typu
-//	public static final short BYTE  = (short)  0x1000; // 8 bit
-//	public static final short INT   = (short)  0x2000; // 16 bit
-//	public static final short DINT  = (short)  0x3000; // 32 bit
-//	public static final short REAL  = (short)  0x4000; // 32 bit float
-//	public static final short LREAL = (short)  0x5000; // 64 bit double
-//	public static final short BIT   = (short)  0x8000; // numer bitu
-
 	public static final int BIT   = 0x80000000;
 	public static final int BYTE  = 0x00000001; // 8 bit
 	public static final int INT   = 0x00000002; // 16 bit
 	public static final int DINT  = 0x00000003; // 32 bit
 	public static final int REAL  = 0x00000004; // 32 bit float
 	public static final int LREAL = 0x00000005; // 64 bit double
-
-
-
-
 
 	public static final int[] size = new int[6];
 	static{

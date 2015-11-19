@@ -2,8 +2,6 @@ package pjpl.scada.process;
 
 import Moka7.S7;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Observer;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
@@ -37,6 +35,7 @@ public class Process1 extends Process{
 	private byte bit = 3;
 	private long prevStep;
 	private long thisStep;
+	private Variables1 variables;
 
 	public Process1(byte processId, LinkedBlockingQueue<Command> commandQueue) {
 		super(processId, commandQueue);
@@ -192,5 +191,4 @@ public class Process1 extends Process{
 //		}
 	}
 
-	private Variables1 variables;
 }

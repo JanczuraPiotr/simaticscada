@@ -6,10 +6,11 @@ import pjpl.s7.common.CommandCode;
 import pjpl.s7.utils.BigEndianInArray;
 
 /**
- * @todo opis
  * @author Piotr Janczura <piotr@janczura.pl>
  */
 public class D_SetReal extends Command{
+	private final short varCode;
+	private final float varVal;
 
 	public D_SetReal(byte processId, short varCode, float varVal, Observer observer) throws IOException {
 		super(processId, observer);
@@ -42,6 +43,4 @@ public class D_SetReal extends Command{
 		BigEndianInArray._float(getVarVal(), buff, 5);
 	}
 
-	private short varCode;
-	private float varVal;
 }

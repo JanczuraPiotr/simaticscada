@@ -1,9 +1,5 @@
 package pjpl.s7.utils;
 
-/**
- *
- * @author pjanczura
- */
 public class Bits {
 	public static final byte BIT_0 = 0;
 	public static final byte BIT_1 = 1;

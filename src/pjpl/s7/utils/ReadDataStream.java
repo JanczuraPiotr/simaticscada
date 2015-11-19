@@ -7,6 +7,12 @@ import java.io.IOException;
  * @author Piotr Janczura <piotr@janczura.pl>
  */
 public abstract class ReadDataStream {
+	private static final int BYTE = 1;
+	private static final int SHORT = 2;
+	private static final int INT = 4;
+	private static final int LONG = 8;
+	private static final int FLOAT = 4;
+	private static final int DOUBLE = 8;
 
 	public static byte readByte(InputStream bis) throws IOException{
 		return BigEndianInArray._byte(scan(bis, BYTE), 0);
@@ -33,10 +39,4 @@ public abstract class ReadDataStream {
 		}
 		return inputBuff;
 	}
-	private static final int BYTE = 1;
-	private static final int SHORT = 2;
-	private static final int INT = 4;
-	private static final int LONG = 8;
-	private static final int FLOAT = 4;
-	private static final int DOUBLE = 8;
 }

@@ -10,6 +10,7 @@ public class Properties extends java.util.Properties{
 	public Properties(pjpl.scada.run.ConfigDefault config){
 		super(config);
 	}
+	@Override
 	public String getProperty(String property){
 		String valueStr = super.getProperty(property);
 		long valueLong = 0;

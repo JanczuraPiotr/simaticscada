@@ -6,10 +6,11 @@ import pjpl.s7.common.CommandCode;
 import pjpl.s7.utils.BigEndianInArray;
 
 /**
- * @todo opis
  * @author Piotr Janczura <piotr@janczura.pl>
  */
 public class D_SetByte extends Command{
+	private short varCode;
+	private byte varVal;
 
 	public D_SetByte(byte processId, short varCode, byte varVal, Observer observer) throws IOException {
 		super(processId, observer);
@@ -42,6 +43,4 @@ public class D_SetByte extends Command{
 		BigEndianInArray._byte(getVarVal(), buff, 5);
 	}
 
-	private short varCode;
-	private byte varVal;
 }

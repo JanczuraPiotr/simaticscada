@@ -32,8 +32,6 @@ public abstract class CommandResponse {
 		this.init();
 	}
 
-	//------------------------------------------------------------------------------
-	// interfejs
 	public byte getProcessId(){
 		return processId;
 	}
@@ -43,35 +41,16 @@ public abstract class CommandResponse {
 	public short getResponseCode(){
 		return responseCode;
 	}
-	// interfejs
-	//------------------------------------------------------------------------------
-
-	//------------------------------------------------------------------------------
-	// metody chronione
 
 	protected abstract void parseResponseStream() throws IOException;
-
-	// metody chronione
-	//------------------------------------------------------------------------------
-
-	//------------------------------------------------------------------------------
-	// metody prywatne
-
 	private void init() throws IOException{
 		parseResponseStream();
 	}
 
-	//------------------------------------------------------------------------------
-	// atrybuty chronione
-
 	protected byte processId;
 	protected short commandCode;
 	protected short responseCode;
-
 	protected InputStream is;
 	protected OutputStream os;
-
-	//------------------------------------------------------------------------------
-	// atrybuty prywatne
 
 }

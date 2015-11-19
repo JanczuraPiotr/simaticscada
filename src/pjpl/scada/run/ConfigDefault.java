@@ -2,8 +2,6 @@ package pjpl.scada.run;
 
 import java.util.Properties;
 
-/**
- */
 public class ConfigDefault extends Properties{
 
 	public ConfigDefault(){

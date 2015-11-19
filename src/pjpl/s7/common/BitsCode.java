@@ -3,10 +3,6 @@ package pjpl.s7.common;
 import Moka7.S7;
 import pjpl.s7.utils.Bits;
 
-/**
- *
- * @author Piotr Janczura <piotr@janczura.pl>
- */
 public class BitsCode {
 	public static byte memType = 0;
 	public static short varCode = 0;

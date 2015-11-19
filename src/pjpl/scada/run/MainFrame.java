@@ -125,7 +125,7 @@ public class MainFrame extends javax.swing.JFrame{
 		try {
 
 			//------------------------------------------------------------------------------
-			// demony
+			// tworzenie wątków
 
 			connectThread = new ServerCommandThread(
 							config.getProperty("simatic_server_ip")
@@ -134,7 +134,7 @@ public class MainFrame extends javax.swing.JFrame{
 
 			);
 
-			// demony
+			// tworzenie wątków
 			//------------------------------------------------------------------------------
 
 			//------------------------------------------------------------------------------

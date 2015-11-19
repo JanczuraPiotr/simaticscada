@@ -6,10 +6,33 @@ import pjpl.s7.common.VarCode;
 import pjpl.s7.utils.Bits;
 
 /**
- * @todo opis
+ * Wszystkie zmienne procesu 1
+ *
  * @author Piotr Janczua <piotr@janczura.pl>
  */
 public class Variables1 extends java.util.Observable implements pjpl.s7.var.Variables{
+	private byte zmienna_1 = 0;
+	private short zmienna_2 = 0;
+	private int zmienna_3 = 0;
+	private float zmienna_4 = 0;
+	private byte I_0 = 0;
+	private byte Q_0 = 0;
+
+	private boolean I_0_0 = false;
+	private boolean I_0_1 = false;
+	private boolean I_0_2 = false;
+	private boolean I_0_3 = false;
+	private boolean I_0_4 = false;
+	private boolean I_0_5 = false;
+	private boolean I_0_6 = false;
+	private boolean I_0_7 = false;
+	private boolean Q_0_0 = false;
+	private boolean Q_0_1 = false;
+	private boolean Q_0_2 = false;
+	private boolean Q_0_3 = false;
+	private boolean Q_0_4 = false;
+	private boolean Q_0_5 = false;
+
 	public Variables1(Observer observer){
 		addObserver(observer);
 	}
@@ -241,26 +264,6 @@ public class Variables1 extends java.util.Observable implements pjpl.s7.var.Vari
 		}
 	}
 
-	private byte zmienna_1 = 0;
-	private short zmienna_2 = 0;
-	private int zmienna_3 = 0;
-	private float zmienna_4 = 0;
-	private byte I_0 = 0;
-	private byte Q_0 = 0;
 
-	private boolean I_0_0 = false;
-	private boolean I_0_1 = false;
-	private boolean I_0_2 = false;
-	private boolean I_0_3 = false;
-	private boolean I_0_4 = false;
-	private boolean I_0_5 = false;
-	private boolean I_0_6 = false;
-	private boolean I_0_7 = false;
-	private boolean Q_0_0 = false;
-	private boolean Q_0_1 = false;
-	private boolean Q_0_2 = false;
-	private boolean Q_0_3 = false;
-	private boolean Q_0_4 = false;
-	private boolean Q_0_5 = false;
 
 }
